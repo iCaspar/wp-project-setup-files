@@ -1,0 +1,16 @@
+# OS Files
+# --------
+.DS_Store
+.Trashes
+Thumbs.db
+
+# Packages and Binaries
+# --------
+/bin
+/vendor
+/node_modules
+
+# Compiled Assets
+# ---------------
+/assets/dist
+/assets/src/css/style.css
