@@ -1,6 +1,6 @@
 <?php
 /**
- * Bootstraps the iC-Analytics Integration Tests
+ * Bootstraps the project's Integration Tests
  *
  * @since 1.2.0
  * @author Caspar Green
@@ -19,15 +19,15 @@ if ( ! defined( 'WP_PLUGIN_DIR' ) ) {
 	define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins/' );
 }
 
-define( 'IC_ANALYTICS_DIR', WP_PLUGIN_DIR . 'ic-analytics/' );
-define( 'IC_ANALYTICS_TESTS_DIR', __DIR__ );
+define( 'PROJECT_DIR', WP_PLUGIN_DIR . 'project/' );
+define( 'PROJECT_TESTS_DIR', __DIR__ );
 
 $WPTestsDir = getTestsDir();
 require $WPTestsDir . '/includes/functions.php';
 require $WPTestsDir . '/includes/bootstrap.php';
 
 tests_add_filter( 'muplugins_loaded', function() {
-	require IC_ANALYTICS_DIR . 'ic-analytics.php';
+	require PROJECT_DIR . 'project.php';
 });
 
 function getTestsDir(): string {

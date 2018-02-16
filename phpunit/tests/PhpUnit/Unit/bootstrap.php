@@ -1,6 +1,6 @@
 <?php
 /**
- * Bootstraps the iC-Analytics Unit Tests
+ * Bootstraps the project's Unit Tests
  *
  * @since 1.2.0
  * @author Caspar Green
@@ -9,18 +9,18 @@
  */
 
 if ( version_compare( phpversion(), '7.1', '<=' ) ) {
-	die( 'iC Analytics tests require at least PHP v.7.1' );
+	die( 'Tests require at least PHP v.7.1' );
 }
 
-define( 'IC_ANALYTICS_TESTS_DIR', __DIR__ );
-define( 'IC_ANALYTICS_DIR', dirname( dirname( dirname( __DIR__ ) ) ) . DIRECTORY_SEPARATOR );
+define( 'PROJECT_TESTS_DIR', __DIR__ );
+define( 'PROJECT_DIR', dirname( dirname( dirname( __DIR__ ) ) ) . DIRECTORY_SEPARATOR );
 
-$ic_analytics_autoload_path = IC_ANALYTICS_DIR . 'vendor/';
+$project_autoload_path = PROJECT_DIR . 'vendor/';
 
-if ( ! file_exists( $ic_analytics_autoload_path . 'autoload.php' ) ) {
-	die( 'Composer is not installed in ' . $ic_analytics_autoload_path . 'vendor/. Maybe try "composer install"?' );
+if ( ! file_exists( $project_autoload_path . 'autoload.php' ) ) {
+	die( 'Composer is not installed in ' . $project_autoload_path . 'vendor/. Maybe try "composer install"?' );
 }
 
-require_once $ic_analytics_autoload_path . 'autoload.php';
+require_once $project_autoload_path . 'autoload.php';
 
-unset ( $ic_analytics_autoload_path );
+unset ( $project_autoload_path );
