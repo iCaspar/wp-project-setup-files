@@ -17,6 +17,7 @@
   "homepage": "https://github.com/iCaspar/project/#readme",
   "devDependencies": {
     "autoprefixer": "~8",
+    "beeper": "~1",
     "bourbon": "^4.2.6",
     "bourbon-neat": "^1.7.2",
     "css-mqpacker": "~6",
@@ -32,7 +33,6 @@
     "gulp-sass": "~3",
     "gulp-sass-lint": "~1",
     "gulp-sourcemaps": "~2",
-    "gulp-uglify": "~3",
-    "gulp-util": "~3"
+    "gulp-uglify": "~3"
   }
 }

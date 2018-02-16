@@ -27,7 +27,7 @@ const imagemin = require('gulp-imagemin');
 
 // Utility Modules
 const del = require('del');
-const gutil = require('gulp-util');
+const beeper = require('beeper');
 const notify = require('gulp-notify');
 const plumber = require('gulp-plumber');
 const rename = require('gulp-rename');
@@ -46,7 +46,7 @@ function handleErrors () {
     'sound': 'Sosumi' // See: https://github.com/mikaelbr/node-notifier#all-notification-options-with-their-defaults
   }).apply(this, args);
 
-  gutil.beep(); // Beep 'sosumi' again.
+  beeper(); // Beep
 
   // Prevent the 'watch' task from stopping.
   this.emit('end');
