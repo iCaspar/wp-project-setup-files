@@ -1,59 +1,80 @@
-'use strict'
+/**
+ * Modeled mostly after WebDevStudios
+ * @see https://github.com/WebDevStudios/wd_s/blob/master/Gulpfile.js
+ */
 
-var gulp = require('gulp'),
+'use strict';
 
-  // Sass and CSS modules.
+const gulp = require('gulp');
 
-  // Uncomment bourbon & neat when needed.
-  //bourbon = require('bourbon').includePaths,
-  //neat = require('bourbon-neat').includePaths,
-  sass = require('gulp-sass'),
-  sassLint = require('gulp-sass-lint'),
-  postcss = require('gulp-postcss'),
-  autoprefixer = require('autoprefixer'),
-  mqCSSpacker = require('css-mqpacker'),
-  sourcemaps = require('gulp-sourcemaps'),
-  cssnano = require('gulp-cssnano'),
+// Style modules.
+const sass = require('gulp-sass');
+const sassLint = require('gulp-sass-lint');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const mqCSSpacker = require('css-mqpacker');
+const sourcemaps = require('gulp-sourcemaps');
+const cssnano = require('gulp-cssnano');
+//const bourbon = require('bourbon').includePaths;
+//const neat = require('bourbon-neat').includePaths;
 
-  // Script modules.
-  uglify = require('gulp-uglify'),
-  concat = require('gulp-concat'),
+// Script modules.
+const uglify = require('gulp-uglify');
+const concat = require('gulp-concat');
 
-  // Image modules.
-  imagemin = require('gulp-imagemin'),
+// Image modules.
+const imagemin = require('gulp-imagemin');
 
-  // Utilities
-  rename = require('gulp-rename'),
-//    plumber = require('gulp-plumber'),
-  notify = require('gulp-notify')
+// Utility Modules
+const del = require('del');
+const gutil = require('gulp-util');
+const notify = require('gulp-notify');
+const plumber = require('gulp-plumber');
+const rename = require('gulp-rename');
 
-/** Utility Tasks */
+/** ---------- Utility Tasks ---------- */
 
 /**
- * Error handling.
- *
- * @function
+ * Handle errors and alert the user.
  */
-function handleErrors() {
-    var args = Array.prototype.slice.call(arguments);
+function handleErrors () {
+  const args = Array.prototype.slice.call(arguments);
 
-    notify.onError({
-        title: 'Task Failed [<%= error.message %>',
-        message: 'See Console',
-        sound: 'Sosumi'
-    }).apply(this.args);
+  notify.onError({
+    'title': 'Task Failed [<%= error.message %>',
+    'message': 'See console.',
+    'sound': 'Sosumi' // See: https://github.com/mikaelbr/node-notifier#all-notification-options-with-their-defaults
+  }).apply(this, args);
 
-    gutil.beep();
+  gutil.beep(); // Beep 'sosumi' again.
 
-    // Prevent watch from stopping.
-    this.emit('end');
+  // Prevent the 'watch' task from stopping.
+  this.emit('end');
 }
 
 /** CSS Tasks */
 
-gulp.task('sass:postcss', function () {
+/**
+ * Minify and optimize CSS.
+ *
+ * https://www.npmjs.com/package/gulp-cssnano
+ */
+gulp.task('cssminify', ['postcss'], () =>
+  gulp.src('assets/src/css/**/*.css')
+    .pipe(plumber({'errorHandler': handleErrors}))
 
-  return gulp.src('assets/src/sass/**/*style.scss')
+    .pipe(cssnano({
+      safe: true
+    }))
+
+    .pipe(rename({suffix: '.min'}))
+
+    .pipe(gulp.dest('assets/dist/css'))
+);
+
+gulp.task('postcss', ['clean:styles'], () =>
+  gulp.src('assets/src/sass/**/*style.scss')
+    .pipe(plumber({'errorHandler': handleErrors}))
 
     .pipe(sourcemaps.init())
 
@@ -65,7 +86,11 @@ gulp.task('sass:postcss', function () {
 
     .pipe(postcss([
       autoprefixer({
-        browsers: ['last 2 versions'],
+        browsers: [
+          'last 2 version',
+          '> 1%',
+          'IE 10'
+        ],
         cascade: false
       }),
       mqCSSpacker({
@@ -76,30 +101,33 @@ gulp.task('sass:postcss', function () {
     .pipe(sourcemaps.write())
 
     .pipe(gulp.dest('assets/src/css'))
-})
+);
 
+/**
+ * Delete style.css and style.min.css before we minify and optimize.
+ *
+ * (If there are styles we don't want cleaned, put it in a subdir.)
+ */
+gulp.task('clean:styles', () =>
+  del(['assets/src/css/*.css', 'assets/dist/css/*.min.css'])
+);
+
+/**
+ * Clean up SASS.
+ */
 gulp.task('sass:lint', ['css:minify'], function () {
   gulp.src([
     'assets/src/sass/**/*style.scss',
     '!assets/src/sass/03-generic/_normalize.scss'
   ])
     .pipe(sassLint())
+
     .pipe(sassLint.format())
-    .pipe(sassLint.failOnError())
-})
 
-gulp.task('css:minify', ['sass:postcss'], function () {
-  return gulp.src('assets/src/css/**/*.css')
-    .pipe(cssnano({
-      safe: true
-    }))
-    .pipe(rename({
-      suffix: '.min'
-    }))
-    .pipe(gulp.dest('assets/dist/css'))
-})
+    .pipe(sassLint.failOnError());
+});
 
-/** Script tasks */
+/** ---------- Script tasks ---------- */
 gulp.task('uglify', ['concat'], function () {
   return gulp.src('assets/src/js/*')
     .pipe(rename({
@@ -108,16 +136,16 @@ gulp.task('uglify', ['concat'], function () {
     .pipe(uglify({
       mangle: false
     }))
-    .pipe(gulp.dest('assets/dist/js'))
-})
+    .pipe(gulp.dest('assets/dist/js'));
+});
 
 gulp.task('concat', function () {
   return gulp.src('assets/src/js/concat/*.js')
     .pipe(sourcemaps.init())
     .pipe(concat('project.js'))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('assets/dist/js'))
-})
+    .pipe(gulp.dest('assets/dist/js'));
+});
 
 /** Image Tasks */
 gulp.task('imagemin', function () {
@@ -127,18 +155,23 @@ gulp.task('imagemin', function () {
       'progressive': true,
       'interlaced': true
     }))
-    .pipe(gulp.dest('assets/dist/images'))
-})
+    .pipe(gulp.dest('assets/dist/images'));
+});
 
 // Individual tasks.
-gulp.task('styles', ['sass:lint'])
-gulp.task('scripts', ['uglify'])
-gulp.task('images', ['imagemin'])
+gulp.task('styles', ['cssminify']);
+gulp.task('scripts', ['uglify']);
+gulp.task('images', ['imagemin']);
+gulp.task('lint', ['sass:lint']);
 
 // Builder.
-gulp.task('build', ['styles', 'scripts', 'images'])
+gulp.task('build', ['styles', 'scripts', 'images']);
 
-// Watcher.
-gulp.task('watch', ['build'], function () {
-  gulp.watch('assets/src/sass/**/*.scss', ['styles'])
-})
+/**
+ * Process tasks when changes happen (Watch).
+ */
+gulp.task('watch', function () {
+  gulp.watch('assets/src/sass/**/*.scss', ['styles']);
+  gulp.watch('assets/src/js/*.js', ['scripts']);
+  gulp.watch('assets/src/images/*', ['images']);
+});
