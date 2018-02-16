@@ -175,3 +175,6 @@ gulp.task('watch', function () {
   gulp.watch('assets/src/js/*.js', ['scripts']);
   gulp.watch('assets/src/images/*', ['images']);
 });
+
+// Default Task
+gulp.task('default', ['watch']);
