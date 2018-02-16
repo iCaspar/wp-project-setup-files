@@ -14,5 +14,34 @@ A collection of files to pull down when starting a new WordPress plugin or theme
 
 * **Travis** -- `.travis.yml` and `ci/travis.sh` boilerplates
 
+## Usage
+
+1. Clone into new project root directory.
+2. If using Local-by-Flywheel
+   1. Move `setup-phpunit.sh` to the container's app directory
+   2. From Local, right-click the container and log into SSH.
+   3. In the container `cd app`, then `bash setup-phpuniy.sh`.
+3. Move `.gitignore` to project root.
+4. Move `composer.json` to project root. Edit for project specifics and `composer install`.
+5. Move contents of travis folder to the project root.
+6. Move contents of gulp folder to project root.
+   1. Edit `package.json` and `gulpfile.js` for project specifics.
+   2. `npm install`
+7. Delete the `wp-project-setup-files` folder. You're all done!
+
+## Gulp Tasks included:
+
+* `styles`
+   1. Compiles all SCSS files in `/assets/src/sass` to CSS in `/assets/src/css`
+   2. Packages like media queries
+   3. Generates source maps
+   4. Minimizes and puts final into `/assets/dist/css`
+* `scripts`
+   1. Uglifies everything in `/assets/src/js` and puts results in `/assets/dist/js`
+   2. Concatinates everything in `assets/src/js/concat` and puts results in `assets/dist/js`
+* `lint` - checks your SASS for funk
+* `images` - minimizes everything in `/assets/src/images` and puts results in `/assets/dist/images`
+* `build` - runs `styles`, `scripts` and `images`
+* `watch` == `default` - watches everything in the `/assets` directory and runs the appropriate task for subfolder contents.
 
 \*Thanks to [Keesiemeijer](https://gist.github.com/keesiemeijer/a888f3d9609478b310c2d952644891ba)
