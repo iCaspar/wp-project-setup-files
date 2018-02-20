@@ -71,14 +71,12 @@ else
 	composer self-update
 fi
 
-# Install PHPUnit 5.7 instead of version 6 and up
-# See ticket https://core.trac.wordpress.org/ticket/39822
 if [[ "/usr/local/bin/phpunit" != $(which phpunit) ]]; then
-	wget https://phar.phpunit.de/phpunit-5.7.19.phar
-	chmod +x phpunit-5.7.19.phar
-	mv phpunit-5.7.19.phar /usr/local/bin/phpunit
+	wget https://phar.phpunit.de/phpunit-6.5.6.phar
+	chmod +x phpunit-6.5.6.phar
+	mv phpunit-6.5.6.phar /usr/local/bin/phpunit
 else
-	printf "phpunit is already installed\n" 
+	printf "phpunit is already installed\n"
 fi
 
 if [[ -f "$HOME/.bashrc" ]]; then
