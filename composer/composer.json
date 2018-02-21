@@ -32,6 +32,7 @@
     "php": ">=7.1"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-master",
     "phpunit/phpunit": "~6",
     "brain/monkey": "^2.2",
     "xwp/wp-dev-lib": "^1.0.1"
