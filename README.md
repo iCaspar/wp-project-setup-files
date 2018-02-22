@@ -22,7 +22,7 @@ If using Local-by-Flywheel, you will first need the Local-by-Flywheel *Volumes* 
 1. Clone into new project root directory.
 2. If using Local-by-Flywheel:
    1. Select your site in the Local app and open the More > Volumes window.
-   2. Add a new Host Source: `/Usrs/account/pat/to/your/site/root/wptests` and container destination: `/tmp/wordpress-tests-lib`.
+   2. Add a new Host Source: `/Users/account/pat/to/your/site/root/app/public/wptests` and container destination: `/tmp/wordpress-tests-lib`.
    3. Restart Local-by-Flywheel.
    4. Move `setup-phpunit.sh` to the container's app directory
    5. From Local, right-click the container and log into SSH.
